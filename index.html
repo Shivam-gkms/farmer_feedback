@@ -4,8 +4,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Farmer Feedback</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
+<!-- Add this in <head> or before </body> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+  document.getElementById("feedbackForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    // Scroll to top in case user is at the bottom
+    window.scrollTo(0, 0);
+
+    // Add temporary highlight to form
+    const formBox = document.querySelector(".form-box");
+    formBox.style.boxShadow = "0 0 15px #4caf50";
+
+    setTimeout(() => {
+      html2canvas(formBox).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'Farmer_Feedback.jpg';
+        link.href = canvas.toDataURL('image/jpeg', 1.0);
+        link.click();
+      });
+    }, 300); // short delay for rendering
+  });
+</script>
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
