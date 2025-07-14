@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Farmer Feedback</title>
  
- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script>
   document.getElementById("feedbackForm").addEventListener("submit", function(e) {
@@ -19,22 +19,20 @@
     }).then(canvas => {
       const imageData = canvas.toDataURL("image/jpeg", 1.0);
 
-      // For browser: auto-download
-      if (navigator.userAgent.includes("Android") && navigator.userAgent.includes("wv")) {
-        // inside WebView (WebIntoApp)
-        window.open(imageData, "_blank");
+      // ✅ FOR WEBVIEW (like WebIntoApp)
+      if (navigator.userAgent.includes("wv") || navigator.userAgent.includes("Android")) {
+        window.open(imageData, '_blank');  // Open image in new tab — user can save it
       } else {
-        // For normal browser
+        // ✅ For browser
         const link = document.createElement("a");
         link.href = imageData;
         link.download = "Farmer_Feedback.jpg";
-        document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link);
       }
     });
   });
 </script>
+
 
  <style>
 
