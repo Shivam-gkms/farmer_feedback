@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Farmer Feedback Portal</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: url('bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .form-box {
+      max-width: 700px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .top-logos {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .top-logos img {
+      width: 90px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    h2 {
+      text-align: center;
+      color: #2b7a3d;
+      margin-bottom: 20px;
+    }
+
+    form {
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+      font-size: 15px;
+    }
+
+    input[type="file"] {
+      padding: 5px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2b7a3d;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #246b34;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #444;
+      font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+      .top-logos {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .top-logos img {
+        width: 70px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-box">
+  <div class="top-logos">
+    <img src="IMD_LOGO-removebg-preview.png" alt="IMD Logo">
+    <img src="CSAUA&TKanpur LOGO.png" alt="CSAUA&T Logo">
+  </div>
+
+  <h2>Farmer Feedback Form</h2>
+
+  <form id="feedbackForm">
+    <label for="name">Farmer Name</label>
+    <input type="text" id="name" required>
+
+    <label for="age">Age</label>
+    <input type="number" id="age" required min="10" max="100">
+
+    <label for="mobile">Mobile Number</label>
+    <input type="tel" id="mobile" pattern="[0-9]{10}" maxlength="10" required placeholder="10-digit number">
+
+    <label for="district">District</label>
+    <input type="text" id="district" required>
+
+    <label for="block">Block</label>
+    <input type="text" id="block" required>
+
+    <label for="aas">AAS Adopted?</label>
+    <select id="aas" required>
+      <option value="">-- Select --</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+
+    <label for="crop">Crop Name</label>
+    <input type="text" id="crop" required>
+
+    <label for="suggestion">Any Suggestions?</label>
+    <textarea id="suggestion" rows="4" placeholder="Write here..."></textarea>
+
+    <label for="photo">Upload Photo (optional)</label>
+    <input type="file" id="photo" accept="image/*">
+
+    <button type="submit">Submit Feedback</button>
+  </form>
+
+  <div class="footer">Thank you for your valuable input!</div>
+</div>
+
+<script>
+  document.getElementById("feedbackForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const name = document.getElementById("name").value;
+    const age = document.getElementById("age").value;
+    const mobile = document.getElementById("mobile").value;
+    const district = document.getElementById("district").value;
+    const block = document.getElementById("block").value;
+    const aas = document.getElementById("aas").value;
+    const crop = document.getElementById("crop").value;
+    const suggestion = document.getElementById("suggestion").value;
+    const photoInput = document.getElementById("photo");
+    const photo = photoInput.files[0];
+
+    doc.setFontSize(14);
+    doc.text("Farmer Feedback Form", 20, 20);
+    doc.setFontSize(12);
+    doc.text(`Name: ${name}`, 20, 35);
+    doc.text(`Age: ${age}`, 20, 45);
+    doc.text(`Mobile: ${mobile}`, 20, 55);
+    doc.text(`District: ${district}`, 20, 65);
+    doc.text(`Block: ${block}`, 20, 75);
+    doc.text(`AAS Adopted: ${aas}`, 20, 85);
+    doc.text(`Crop: ${crop}`, 20, 95);
+    doc.text(`Suggestion: ${suggestion}`, 20, 105);
+
+    if (photo) {
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const img = evt.target.result;
+        doc.addImage(img, 'JPEG', 20, 115, 60, 60);
+        doc.save("Farmer_Feedback.pdf");
+      };
+      reader.readAsDataURL(photo);
+    } else {
+      doc.save("Farmer_Feedback.pdf");
+    }
+  });
+</script>
+
+</body>
+</html>
