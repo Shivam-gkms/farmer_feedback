@@ -190,11 +190,17 @@
       reader.onload = function(evt) {
         const img = evt.target.result;
         doc.addImage(img, 'JPEG', 20, 115, 60, 60);
-        doc.save("Farmer_Feedback.pdf");
+        const blob = doc.output('blob');
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+
       };
       reader.readAsDataURL(photo);
     } else {
-      doc.save("Farmer_Feedback.pdf");
+      const blob = doc.output('blob');
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+
     }
   });
 </script>
